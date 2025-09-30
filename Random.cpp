@@ -19,7 +19,7 @@ int main() {
     }
 
     // TABLA
-    cout << "     TABLA:\n   ";
+    cout << "=============================================================\n     TABLA:\n   ";
     for (int i = 0; i < totalTablas; i++) {
         if (i % 4 == 0 && i > 0) {
             cout << "\n   ";
@@ -48,12 +48,12 @@ int main() {
     kontinue = true;
     static int DescardR = 5;
     do {
-        cout << "\nMANO ACTUAL: ";
+        cout << "\n=============================================================\nMANO ACTUAL: ";
         for (int i = 0; i < HandN; i++) {
-            cout << cartas[i] << "  ";
+            cout << "(" << i+1 << ")" << cartas[i] << "  ";
         }
-
-        cout << "\n\nQue quieres hacer?\n1.Jugar mano\n2.Eliminar carta\n3.Terminar\n";
+        cout << "\n=============================================================\n";
+        cout << "\n\nQue quieres hacer?\n\n1.Jugar mano\n2.Eliminar carta\n3.Terminar\n\nIngrese la opcion: ";
         cin >> opc;
 
         switch (opc) {
@@ -61,28 +61,32 @@ int main() {
                 break;
             case 2: {
             static int DescardR = 5;
-            int del;
+            int del, deleteCards;
             if (DescardR <= 0) {
             cout << "\nYa no tienes descartes disponibles\n";
                 break;
             }
-                do {
-                    cout << "\nDescartes restantes: " << DescardR << "\n\nQue carta deseas eliminar? (1-6, negativo para salir): ";
-                    cin >> del;
+            do {
+                cout << "Cuantos numeros quiere eliminar? ";
+                cin >> deleteCards;
+                if (deleteCards < 1 || deleteCards > HandN) {
+                    cout << "\n ! Opcion invalida\n\n";
+                }
+            } while (deleteCards < 1 || deleteCards > HandN);
 
-                    if (del < 0) break; // salir del descarte
-                    if (del < 1 || del > HandN) {
-                        cout << "\nOpcion invalida\n";
-                    }
+            cout << "\nQue cartas deseas eliminar? (1 - " << HandN << ", negativo para salir): ";
 
-                    if (del > 0 && del >= 1 && del <= HandN) {
-                        DescardR--;
-                    }
+            for (int i = 0; i<deleteCards; i++) {
 
-                    if (DescardR > 0) {cout << "\nNUEVA MANO: ";}
+                    //
+                    do {
+                        cin >> del;
+                        if (del <= 0 || del > HandN) {
+                            cout << "\n ! Opcion invalida\n\nQue cartas deseas eliminar? (1 - " << HandN << ", negativo para salir): ";
+                        }
+                    } while (del <= 0 || del > HandN);
 
                         for (int i = 0; i < HandN; i++) {
-                            //CAMBIO
                             if (cartas[i] == cartas[del - 1]) {
                                     int nuevo, min = 1, max = 54;
                                     bool repetido;
@@ -98,16 +102,12 @@ int main() {
                                     } while (repetido == true);
                                 cartas[i] = nuevo;
                             }
-                            if (DescardR > 0) {cout << cartas[i] << "  ";}
-
                         }
-
-
-                } while (del > 0 && DescardR > 0);
-                /*cout << "\nNUEVA MANO: ";
-                for (int i = 0; i<HandN; i++) {
-                    cout << cartas[i] << "  ";
-                }*/
+            }
+            if (del >= 1 && del <= HandN) {
+                DescardR--;
+            }
+            cout << "\nDescartes restantes: " << DescardR << "\n";
 
                 break;
             }
@@ -118,13 +118,6 @@ int main() {
         }
 
     } while (kontinue == true);
-
-
-    //Reimprimir
-    cout << "MANO FINAL: ";
-    for (int i = 0; i < HandN; i++) {
-            cout << cartas[i] << " ";
-    } cout << "\n";
 
     return 0;
 }
